@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[패스트캠퍼스] Google AI Studio 설정법 가이드</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text: #111111;
+      --body: #374151;
+      --muted: #6B7280;
+      --border: #E5E7EB;
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --tint: #ECFDF5;
+      --callout-border: #A7F3D0;
+      --sidebar-width: 248px;
+      --navbar-height: 56px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--body);
+      background: #fff;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ─── Navbar ─── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--navbar-height);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 100;
+      gap: 12px;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .navbar-brand-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .badge-green {
+      background: var(--tint);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .navbar-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+    }
+
+    .navbar-title {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ─── Layout ─── */
+    .layout {
+      display: flex;
+      margin-top: var(--navbar-height);
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      position: sticky;
+      top: var(--navbar-height);
+      align-self: flex-start;
+      height: calc(100vh - var(--navbar-height));
+      overflow-y: auto;
+      border-right: 1px solid var(--border);
+      padding: 28px 0 40px;
+      background: #fff;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .sidebar-group-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0 16px 10px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 16px;
+      font-size: 13.5px;
+      color: var(--body);
+      text-decoration: none;
+      border-radius: 6px;
+      margin: 1px 8px;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-link:hover { background: #F9FAFB; color: var(--text); }
+
+    .sidebar-link.active {
+      background: var(--tint);
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    .sidebar-link .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border);
+      flex-shrink: 0;
+      transition: background 0.12s;
+    }
+
+    .sidebar-link.active .dot { background: var(--primary); }
+
+    /* ─── Main ─── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      max-width: 760px;
+      padding: 44px 52px 100px;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      padding-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--tint);
+      color: var(--primary-dark);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 14px;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      color: var(--body);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    /* ─── Sections ─── */
+    .section {
+      padding: 36px 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: calc(var(--navbar-height) + 20px);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.2px;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 22px 0 10px;
+    }
+
+    p { margin-bottom: 12px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol { padding-left: 22px; margin-bottom: 12px; }
+    li { margin-bottom: 5px; }
+
+    strong { color: var(--text); font-weight: 600; }
+
+    a { color: var(--primary-dark); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* ─── Callouts ─── */
+    .callout {
+      background: var(--tint);
+      border-left: 3px solid var(--primary);
+      border-radius: 0 6px 6px 0;
+      padding: 13px 16px;
+      margin: 18px 0;
+      color: #065F46;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .callout.warn {
+      background: #FFFBEB;
+      border-left-color: #F59E0B;
+      color: #92400E;
+    }
+
+    .callout.info {
+      background: #EFF6FF;
+      border-left-color: #60A5FA;
+      color: #1E40AF;
+    }
+
+    .callout-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    /* ─── Steps ─── */
+    .steps { margin: 16px 0; }
+
+    .step {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .step-n {
+      width: 22px;
+      height: 22px;
+      background: var(--tint);
+      color: var(--primary-dark);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    /* ─── Images ─── */
+    .img-wrap {
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .img-wrap img {
+      width: 100%;
+      display: block;
+    }
+
+    .img-caption {
+      padding: 8px 14px;
+      background: #F9FAFB;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── Menu Grid ─── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .menu-card {
+      background: #F9FAFB;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .menu-card.highlight-card {
+      background: var(--tint);
+      border-color: var(--callout-border);
+    }
+
+    .menu-card-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .menu-card.highlight-card .menu-card-title { color: var(--primary-dark); }
+
+    .tag {
+      background: var(--tint);
+      color: var(--primary-dark);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: 20px;
+    }
+
+    .menu-card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ─── Settings List ─── */
+    .settings-list { margin: 16px 0; }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child { border-bottom: none; }
+
+    .setting-key {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+      padding-top: 1px;
+    }
+
+    .setting-val { font-size: 14px; color: var(--body); }
+
+    /* ─── Temp Compare ─── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .compare-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .compare-card.blue {
+      background: #EFF6FF;
+      border-color: #BFDBFE;
+    }
+
+    .compare-card.green {
+      background: var(--tint);
+      border-color: var(--callout-border);
+    }
+
+    .compare-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .compare-card.blue .compare-title { color: #1D4ED8; }
+    .compare-card.green .compare-title { color: var(--primary-dark); }
+
+    .compare-body {
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .compare-card.blue .compare-body { color: #1E40AF; }
+    .compare-card.green .compare-body { color: #065F46; }
+
+    /* ─── Inline code ─── */
+    code {
+      background: #F3F4F6;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 상단 네비바 ── -->
+<nav class="navbar">
+  <a href="#intro" class="navbar-brand">
+    <span class="navbar-brand-name">패스트캠퍼스</span>
+    <span class="badge-green">국비지원</span>
+  </a>
+  <div class="navbar-sep"></div>
+  <span class="navbar-title">Google AI Studio 설정법 가이드</span>
+</nav>
+
+<div class="layout">
+
+  <!-- ── 사이드바 ── -->
+  <aside class="sidebar">
+    <div class="sidebar-group-label">가이드 목차</div>
+    <a href="#intro"    class="sidebar-link active"><span class="dot"></span>시작하기</a>
+    <a href="#s1"       class="sidebar-link"><span class="dot"></span>1. 로그인 하기</a>
+    <a href="#s2"       class="sidebar-link"><span class="dot"></span>2. 메뉴 소개</a>
+    <a href="#s3"       class="sidebar-link"><span class="dot"></span>3. 모델 선택하기</a>
+    <a href="#s3b"      class="sidebar-link"><span class="dot"></span>3. Playground 메뉴 안내</a>
+    <a href="#s4"       class="sidebar-link"><span class="dot"></span>4. Temperature &amp; TOP P</a>
+    <a href="#s4b"      class="sidebar-link"><span class="dot"></span>4. 참고 사항</a>
+  </aside>
+
+  <!-- ── 본문 ── -->
+  <main class="main">
+
+    <!-- Hero -->
+    <div id="intro" class="hero section">
+      <div class="hero-badge">🧭 설정법 가이드</div>
+      <h1>Google AI Studio<br>설정법 가이드</h1>
+      <p class="hero-desc">
+        안녕하세요, <strong>패스트캠퍼스 국비지원</strong>입니다.<br>
+        Google AI Studio의 UI 업데이트에 따라, 달라진 인터페이스 화면 설정법을 안내드립니다.
+      </p>
+
+      <div class="callout info">
+        <div class="callout-title">➡️ 관련 강의 안내</div>
+        2차시. 나노바나나 시작하기 — [구글 AI 스튜디오 및 기본 인터페이스 익히기]<br>
+        클립의 버전 업데이트에 따른 <strong>부가자료</strong>이오니 반드시 확인해주세요.
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">📢 버전 기준 안내</div>
+        본 가이드는 <strong>'Google AI Studio (26년 2월 27일)'</strong> 기준으로 작성되었습니다.
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">🔗 바로가기</div>
+        Google AI Studio :
+        <a href="https://aistudio.google.com/welcome" target="_blank" rel="noopener">
+          https://aistudio.google.com/welcome
+        </a><br>
+        본 강의에서는 <strong>Google AI Studio — Nano Banana (Gemini 2.5-flash-image)</strong> 버전으로 진행합니다.
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">⚠️ API 비용 주의</div>
+        Google AI Studio는 개발자용 플랫폼으로, 무료 외 버전 사용 시 API 비용이 발생합니다.<br>
+        반드시 <strong>[Paid] 아이콘이 없는 무료 모델 버전</strong>을 선택해주세요.
+      </div>
+    </div>
+
+    <!-- 1. 로그인 -->
+    <div id="s1" class="section">
+      <h2><span class="section-num">1</span>Google AI Studio 로그인 하기</h2>
+
+      <div class="img-wrap">
+        <img src="images/image.png" alt="Google AI Studio 메인 화면">
+        <div class="img-caption">Google AI Studio 메인 화면 — 오른쪽 상단 [Get started] 버튼 클릭</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div>
+            <a href="https://aistudio.google.com/welcome" target="_blank" rel="noopener">
+              https://aistudio.google.com/welcome
+            </a> 접속
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div>오른쪽 상단의 <strong>[Get started]</strong> 버튼 클릭</div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div>Google 계정으로 로그인</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 메뉴 소개 -->
+    <div id="s2" class="section">
+      <h2><span class="section-num">2</span>Google AI Studio 메뉴 소개</h2>
+
+      <div class="callout">
+        업데이트 이후 <strong>Chat → Playground</strong> 로 프롬프트 입력 메뉴의 이름이 변경되었습니다.
+      </div>
+
+      <div class="img-wrap">
+        <img src="images/image 1.png" alt="Google AI Studio 메뉴 구성">
+        <div class="img-caption">왼쪽 사이드바 메뉴 구성 — ①~④ 번호 참고</div>
+      </div>
+
+      <div class="menu-grid">
+        <div class="menu-card highlight-card">
+          <div class="menu-card-title">① Playground <span class="tag">강의에서 사용</span></div>
+          <div class="menu-card-desc">나노바나나를 사용할 수 있는 Chat 화면. 강의에서 주로 활용하는 메뉴입니다.</div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-card-title">② Build</div>
+          <div class="menu-card-desc">실제 앱을 구현하는 공간. 앱 프로토타입 제작 및 기존 앱 활용이 가능합니다.</div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-card-title">③ Dashboard</div>
+          <div class="menu-card-desc">관리용 메인 페이지. API 키 세팅, 개발 프로젝트, 결제 관리 등을 담당합니다.</div>
+        </div>
+        <div class="menu-card">
+          <div class="menu-card-title">④ Documentation</div>
+          <div class="menu-card-desc">Google AI Studio 기술 안내 페이지입니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 모델 선택 -->
+    <div id="s3" class="section">
+      <h2><span class="section-num">3</span>Playground에서 나노바나나 모델 선택하기</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div>왼쪽 사이드바에서 <strong>[Playground]</strong> 클릭</div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div>화면 오른쪽 패널 상단의 <strong>[모델 세팅 아이콘]</strong> 클릭</div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div>현재 선택된 모델 버튼 (예: <code>Nano Banana Pro</code>) 클릭</div>
+        </div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div>목록에서 <strong>Nano Banana (Gemini-2.5-flash-image)</strong> — <strong>'paid' 없는 무료 버전</strong> 선택</div>
+        </div>
+      </div>
+
+      <div class="img-wrap">
+        <img src="images/image 2.png" alt="Playground 화면 — 모델 세팅 아이콘">
+        <div class="img-caption">Playground 화면 — 오른쪽 패널에서 현재 선택된 모델 버튼 클릭</div>
+      </div>
+
+      <div class="img-wrap">
+        <img src="images/image 3.png" alt="Model selection 팝업 — Nano Banana 선택">
+        <div class="img-caption">Model selection 팝업 — Nano Banana (Gemini-2.5-flash-image) 선택</div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-title">⚠️ 모델 선택 주의사항</div>
+        <strong>'paid' 아이콘이 있는 모델은 API 비용이 발생</strong>합니다.<br>
+        반드시 <strong>Nano Banana (Gemini-2.5-flash-image)</strong>의 <strong>무료(free) 버전</strong>을 선택해주세요.
+      </div>
+    </div>
+
+    <!-- 3b. Playground 메뉴 안내 -->
+    <div id="s3b" class="section">
+      <h2>Playground — Nano Banana 메뉴 안내</h2>
+
+      <div class="img-wrap">
+        <img src="images/image 4.png" alt="Playground 오른쪽 패널 — 주요 설정 항목">
+        <div class="img-caption">오른쪽 패널 주요 설정 — System Instructions · Temperature · Aspect ratio (빨간 테두리 항목)</div>
+      </div>
+
+      <div class="settings-list">
+        <div class="setting-row">
+          <div class="setting-key">System Instructions</div>
+          <div class="setting-val">
+            모델에 대한 선택적 색조 및 스타일 지침을 위한 <strong>'고정 프롬프트'</strong> 입력란입니다.<br>
+            요청하는 모든 이미지의 느낌이 해당 지침에 따라 어느 정도 고정되거나 일관성이 유지됩니다.
+            <div class="callout" style="margin-top: 10px; margin-bottom: 0;">
+              단, 개별 프롬프트 요청과 상충하는 경우 <strong>개별 프롬프트가 우선</strong> 적용됩니다.
+            </div>
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-key">Aspect ratio</div>
+          <div class="setting-val">
+            생성할 이미지의 비율을 설정합니다.<br>
+            <code>1:1</code> · <code>9:16</code> · <code>16:9</code> 등 다양한 비율을 선택할 수 있습니다.
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-key">Temperature</div>
+          <div class="setting-val">
+            응답의 창의성 &amp; 다양성 값을 조정합니다.<br>
+            아래 섹션 4에서 자세한 내용을 확인하세요.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Temperature & TOP P -->
+    <div id="s4" class="section">
+      <h2><span class="section-num">4</span>Temperature &amp; TOP P 설정</h2>
+
+      <h3>Temperature</h3>
+      <div class="compare-grid">
+        <div class="compare-card blue">
+          <div class="compare-title">0에 가까울수록 — 안정적</div>
+          <p class="compare-body">
+            <strong>고품질 &amp; 사실적인 이미지</strong><br>
+            프롬프트에 충실하여 반복적이고 예측 가능한 범위로 응답합니다.
+          </p>
+        </div>
+        <div class="compare-card green">
+          <div class="compare-title">1에 가까울수록 — 창의적</div>
+          <p class="compare-body">
+            <strong>다양하고 자유로운 이미지</strong><br>
+            동일한 프롬프트에 대해 매번 다른 결과물을 받을 가능성이 높아집니다.
+          </p>
+        </div>
+      </div>
+
+      <h3>Advanced Settings — TOP P</h3>
+      <div class="compare-grid">
+        <div class="compare-card blue">
+          <div class="compare-title">0에 가까울수록</div>
+          <p class="compare-body">
+            <strong>동일한 이미지 반복 생성</strong><br>
+            프롬프트에 충실하며 변동성이 적습니다.
+          </p>
+        </div>
+        <div class="compare-card green">
+          <div class="compare-title">1에 가까울수록</div>
+          <p class="compare-body">
+            <strong>창의적 &amp; 다양한 이미지</strong><br>
+            더 많은 어휘와 표현 방식을 탐색합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 24px;">
+        <div class="callout-title">🧭 Temperature &amp; TOP P 조정 예시</div>
+        <p style="margin-bottom: 10px;"><strong>프롬프트:</strong> "기니피그가 핑크색 미니 자동차를 운전하는 이미지 생성해줘"</p>
+        <ul style="margin-bottom: 0;">
+          <li><strong>값이 0일 때:</strong> 매번 거의 동일한 "기니피그가 핑크색 미니 자동차를 운전하는" 이미지를 생성</li>
+          <li><strong>값이 1일 때:</strong> 핵심 아이디어는 유지하되, 배경이나 추가 요소를 매번 다르게 제안</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 4b. 참고 사항 -->
+    <div id="s4b" class="section">
+      <h2>Playground — Nano Banana 참고 사항</h2>
+
+      <div class="img-wrap">
+        <img src="images/image 5.png" alt="이미지 재생성 및 Token 사용량 확인">
+        <div class="img-caption">이미지 위에 커서를 올리면 재생성 버튼 표시 / 상단 token 수 확인</div>
+      </div>
+
+      <div class="settings-list">
+        <div class="setting-row">
+          <div class="setting-key">이미지 재생성</div>
+          <div class="setting-val">
+            생성된 이미지에 마우스 커서를 올리면 <strong>[Gemini 아이콘]</strong>이 나타납니다.<br>
+            클릭하면 동일한 프롬프트로 이미지를 다시 생성할 수 있습니다.
+          </div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-key">Token 사용량</div>
+          <div class="setting-val">
+            화면 상단의 <code>tokens</code> 표시를 통해 현재까지 사용한 토큰 수를 확인할 수 있습니다.
+          </div>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top: 24px;">
+        <div class="callout-title">💡 Google AI Pro 구독자 안내</div>
+        Google AI Pro 버전을 구독 중이라면, Gemini 화면에서 <strong>[이미지 만들기]</strong>를 선택하여 이미지를 생성할 수 있습니다.<br>
+        <small style="opacity: 0.85;">* 비율 조정 등 필요 사항은 '프롬프트 명령어'를 통해 진행 가능합니다.</small>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // 스크롤 위치에 따른 사이드바 활성 링크 업데이트
+  const sections = document.querySelectorAll('.section[id]');
+  const links = document.querySelectorAll('.sidebar-link');
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+
+  sections.forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>
