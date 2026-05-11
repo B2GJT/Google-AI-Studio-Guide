@@ -27,8 +27,8 @@
       font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: var(--body);
       background: #fff;
-      font-size: 15px;
-      line-height: 1.7;
+      font-size: 17px;
+      line-height: 1.75;
     }
 
     /* ─── Navbar ─── */
@@ -146,8 +146,7 @@
     .main {
       flex: 1;
       min-width: 0;
-      max-width: 760px;
-      padding: 44px 52px 100px;
+      padding: 44px 60px 100px;
     }
 
     /* ─── Hero ─── */
@@ -171,7 +170,7 @@
     }
 
     .hero h1 {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       color: var(--text);
       line-height: 1.25;
@@ -180,9 +179,9 @@
     }
 
     .hero-desc {
-      font-size: 15px;
+      font-size: 17px;
       color: var(--body);
-      line-height: 1.75;
+      line-height: 1.8;
       margin-bottom: 24px;
     }
 
@@ -196,13 +195,13 @@
     .section:last-child { border-bottom: none; }
 
     h2 {
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 600;
       color: var(--text);
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       letter-spacing: -0.2px;
     }
 
@@ -210,21 +209,21 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       background: var(--primary);
       color: #fff;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 700;
       border-radius: 50%;
       flex-shrink: 0;
     }
 
     h3 {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 600;
       color: var(--text);
-      margin: 22px 0 10px;
+      margin: 24px 0 10px;
     }
 
     p { margin-bottom: 12px; }
@@ -240,13 +239,13 @@
     /* ─── Callouts ─── */
     .callout {
       background: var(--tint);
-      border-left: 3px solid var(--primary);
+      border-left: 4px solid var(--primary);
       border-radius: 0 6px 6px 0;
-      padding: 13px 16px;
-      margin: 18px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
       color: #065F46;
-      font-size: 14px;
-      line-height: 1.65;
+      font-size: 16px;
+      line-height: 1.7;
     }
 
     .callout.warn {
@@ -277,18 +276,18 @@
     }
 
     .step-n {
-      width: 22px;
-      height: 22px;
+      width: 28px;
+      height: 28px;
       background: var(--tint);
       color: var(--primary-dark);
       border-radius: 50%;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     /* ─── Images ─── */
@@ -306,9 +305,9 @@
     }
 
     .img-caption {
-      padding: 8px 14px;
+      padding: 10px 16px;
       background: #F9FAFB;
-      font-size: 12px;
+      font-size: 14px;
       color: var(--muted);
       border-top: 1px solid var(--border);
     }
@@ -433,6 +432,38 @@
       font-family: 'Courier New', monospace;
       font-size: 13px;
       color: var(--text);
+    }
+
+    /* ─── 반응형 ─── */
+    @media (max-width: 768px) {
+      /* 사이드바 숨김 */
+      .sidebar { display: none; }
+
+      /* 본문 여백 축소 */
+      .main { padding: 24px 18px 80px; }
+
+      /* 제목 크기 축소 */
+      .hero h1 { font-size: 26px; }
+      .hero-desc { font-size: 15px; }
+      h2 { font-size: 20px; }
+      h3 { font-size: 15px; }
+
+      /* 본문 텍스트 */
+      body { font-size: 15px; }
+      .callout { font-size: 14px; padding: 13px 15px; }
+      .img-caption { font-size: 12.5px; }
+
+      /* 메뉴 그리드 - 1열로 변경 */
+      .menu-grid { grid-template-columns: 1fr; }
+
+      /* 설정 목록 */
+      .setting-row { grid-template-columns: 1fr; gap: 4px; }
+
+      /* 이미지 */
+      .img-wrap { margin: 16px 0; }
+
+      /* 네비바 타이틀 숨김 */
+      .navbar-title { display: none; }
     }
   </style>
 </head>
